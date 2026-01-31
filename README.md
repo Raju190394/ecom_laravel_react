@@ -72,7 +72,7 @@ php artisan migrate:fresh --seed
 ```bash
 cd frontend
 
-# Install dependencies
+# Install dependencies sdasd
 npm install
 
 # Run the development server
