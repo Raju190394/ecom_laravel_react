@@ -1,0 +1,45 @@
+# Laravel specific
+/vendor
+/node_modules
+/public/storage
+/public/hot
+/public/build
+/storage/*.key
+/storage/pail
+# .env
+.env.backup
+.env.production
+.phpunit.result.cache
+*.log
+ Homestead.json
+ Homestead.yaml
+ auth.json
+ .phpunit.cache
+ .phpactor.json
+
+# Frontend specific
+/frontend/node_modules
+/frontend/dist
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# IDE / OS specific
+.DS_Store
+.idea
+.vscode
+.fleet
+.nova
+.zed
+Thumbs.db
+*.swp
+*.swo
+
+# Database
+/database/*.sqlite
+/database/*.sqlite-journal
