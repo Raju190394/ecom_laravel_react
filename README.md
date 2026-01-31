@@ -1,6 +1,6 @@
-# Antigravity OMS - Premium Order Management System
+#  OMS - Premium Order Management System
 
-Antigravity OMS is a high-performance, enterprise-grade Order Management System built with a focus on scalability, clean architecture, and premium user experience. It features a robust Laravel 11 backend and a sleek React 18 frontend.
+ OMS is a high-performance, enterprise-grade Order Management System built with a focus on scalability, clean architecture, and premium user experience. It features a robust Laravel 11 backend and a sleek React 18 frontend.
 
 ## 🚀 Key Features
 
@@ -99,4 +99,4 @@ npm run dev
 - **Stock Integrity**: Used Database Transactions and `lockForUpdate` to prevent race conditions during checkout.
 
 ## 📄 License
-Internal Development - Antigravity Agentic Coding.
+Internal Development -  Agentic Coding.
