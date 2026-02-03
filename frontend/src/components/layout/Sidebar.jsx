@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                         <ShieldCheck className="text-white w-5 h-5" />
                     </div>
                     <span className="text-xl font-black tracking-tight text-slate-900">
-                        ANTIGRAVITY
+                        OMS
                     </span>
                 </Link>
                 <button

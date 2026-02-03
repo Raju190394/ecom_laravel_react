@@ -36,7 +36,7 @@ const Register = () => {
                             <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30">
                                 <ShieldCheck className="w-7 h-7" />
                             </div>
-                            <span className="text-2xl font-black tracking-tighter">ANTIGRAVITY</span>
+                            <span className="text-2xl font-black tracking-tighter">Order Management System</span>
                         </div>
                         <h1 className="text-5xl font-black leading-tight mb-8">
                             Join the <br />
