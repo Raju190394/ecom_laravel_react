@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -25,6 +26,20 @@ class AuthService
             'token_type' => 'Bearer',
             'user' => $user
         ];
+    }
+
+    public function register(array $data)
+    {
+        $roleId = Role::where('name', 'Customer')->value('id') ?? 4;
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id' => $roleId,
+        ]);
+
+        return $user;
     }
 
     public function logout(User $user)

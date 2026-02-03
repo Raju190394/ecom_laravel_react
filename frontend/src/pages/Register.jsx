@@ -125,7 +125,7 @@ const Register = () => {
                                 ) : (
                                     <>
                                         <span className="text-lg">Initialize Onboarding</span>
-                                        <LogIn className="w-5 h-5 ml-3" />
+                                        <UserPlus className="w-5 h-5 ml-3" />
                                     </>
                                 )}
                             </button>
