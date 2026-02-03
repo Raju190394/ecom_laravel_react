@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { Menu, Search, ShoppingCart, Bell } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 
 const Header = ({ toggleSidebar }) => {
     const { cart } = useCart();
@@ -38,17 +38,19 @@ const Header = ({ toggleSidebar }) => {
                 </button>
 
                 {/* Cart */}
-                <Link
-                    to="/checkout"
-                    className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all relative group"
-                >
-                    <ShoppingCart className="w-5 h-5" />
-                    {cart.length > 0 && (
-                        <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm group-hover:scale-110 transition-transform">
-                            {cart.length}
-                        </span>
-                    )}
-                </Link>
+                {user && !['Admin', 'Manager', 'Staff'].includes(user.role?.name) && (
+                    <Link
+                        to="/checkout"
+                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all relative group"
+                    >
+                        <ShoppingCart className="w-5 h-5" />
+                        {cart.length > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm group-hover:scale-110 transition-transform">
+                                {cart.length}
+                            </span>
+                        )}
+                    </Link>
+                )}
 
                 {/* Mobile User Avatar (Functional Fallback) */}
                 <div className="md:hidden w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs border border-indigo-200">

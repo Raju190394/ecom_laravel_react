@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { Package, ShoppingCart, ArrowRight, Search, Filter, Star, Info } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +11,10 @@ const Products = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const { addToCart, cartCount } = useCart();
+    const { user } = useAuth();
     const { showToast } = useToast();
+
+    const isAdmin = user && ['Admin', 'Manager', 'Staff'].includes(user.role?.name);
 
     const handleAddToCart = (product) => {
         addToCart(product);
@@ -19,8 +23,12 @@ const Products = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
+            setLoading(true);
             try {
-                const res = await api.get('/products');
+                // Pass search param to the API
+                const res = await api.get('/products', {
+                    params: { search: searchTerm }
+                });
                 setProducts(res.data.data);
             } catch (err) {
                 console.error('Error fetching products', err);
@@ -28,14 +36,16 @@ const Products = () => {
                 setLoading(false);
             }
         };
-        fetchProducts();
-    }, []);
 
-    const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        // Debounce the call
+        const delayDebounceFn = setTimeout(() => {
+            fetchProducts();
+        }, 500);
 
-    if (loading) return (
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchTerm]);
+
+    if (loading && products.length === 0) return (
         <div className="flex flex-col justify-center items-center py-40 animate-pulse">
             <div className="w-16 h-16 bg-slate-200 rounded-2xl mb-4"></div>
             <p className="text-slate-400 font-medium">Curating your collection...</p>
@@ -67,7 +77,7 @@ const Products = () => {
 
             {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filteredProducts.map((product) => (
+                {products.map((product) => (
                     <div key={product.id} className="group bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-indigo-100 transition-all duration-500 flex flex-col">
                         {/* Image Placeholder */}
                         <div className="h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center p-8 group-hover:bg-indigo-50/30 transition-colors">
@@ -107,23 +117,25 @@ const Products = () => {
                                     </span>
                                 </div>
 
-                                <button
-                                    onClick={() => handleAddToCart(product)}
-                                    disabled={product.stock_quantity <= 0}
-                                    className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${product.stock_quantity > 0
-                                        ? 'bg-slate-900 text-white hover:bg-indigo-600 shadow-lg shadow-slate-200'
-                                        : 'bg-slate-100 text-slate-300 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <ShoppingCart size={20} />
-                                </button>
+                                {!isAdmin && (
+                                    <button
+                                        onClick={() => handleAddToCart(product)}
+                                        disabled={product.stock_quantity <= 0}
+                                        className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${product.stock_quantity > 0
+                                            ? 'bg-slate-900 text-white hover:bg-indigo-600 shadow-lg shadow-slate-200'
+                                            : 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                                            }`}
+                                    >
+                                        <ShoppingCart size={20} />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {filteredProducts.length === 0 && (
+            {products.length === 0 && (
                 <div className="text-center py-20 bg-white rounded-[2rem] border border-dashed border-slate-200">
                     <Search className="mx-auto text-slate-300 mb-4" size={48} />
                     <h3 className="text-xl font-bold text-slate-900">No products found</h3>
@@ -132,21 +144,23 @@ const Products = () => {
             )}
 
             {/* Floating Action: Cart (Mobile Optimized) */}
-            {cartCount > 0 && (
-                <div className="fixed bottom-8 right-8 z-40">
-                    <Link to="/checkout" className="flex items-center space-x-3 bg-indigo-600 py-4 px-6 rounded-2xl text-white shadow-2xl shadow-indigo-300 transform transition-all hover:scale-105 active:scale-95">
-                        <div className="relative">
-                            <ShoppingCart className="w-6 h-6" />
-                            <span className="absolute -top-2 -right-2 bg-white text-indigo-600 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
-                                {cartCount}
-                            </span>
-                        </div>
-                        <span className="font-bold tracking-tight">Checkout Now</span>
-                        <ArrowRight className="w-5 h-5 lg:block hidden" />
-                    </Link>
-                </div>
-            )}
-        </div>
+            {
+                !isAdmin && cartCount > 0 && (
+                    <div className="fixed bottom-8 right-8 z-40">
+                        <Link to="/checkout" className="flex items-center space-x-3 bg-indigo-600 py-4 px-6 rounded-2xl text-white shadow-2xl shadow-indigo-300 transform transition-all hover:scale-105 active:scale-95">
+                            <div className="relative">
+                                <ShoppingCart className="w-6 h-6" />
+                                <span className="absolute -top-2 -right-2 bg-white text-indigo-600 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
+                                    {cartCount}
+                                </span>
+                            </div>
+                            <span className="font-bold tracking-tight">Checkout Now</span>
+                            <ArrowRight className="w-5 h-5 lg:block hidden" />
+                        </Link>
+                    </div>
+                )
+            }
+        </div >
     );
 };
 

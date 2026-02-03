@@ -12,8 +12,11 @@ const Sidebar = ({ isOpen, onClose }) => {
     const navItems = [
         { path: '/', label: 'Home', icon: Home },
         { path: '/products', label: 'Products', icon: Package },
-        ...(user ? [{ path: '/orders', label: 'My Orders', icon: ShoppingBag }] : []),
-        ...(isAdmin ? [{ path: '/admin', label: 'Admin Panel', icon: LayoutDashboard }] : []),
+        ...(user && !isAdmin ? [{ path: '/orders', label: 'My Orders', icon: ShoppingBag }] : []),
+        ...(isAdmin ? [
+            { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+            { path: '/admin/products', label: 'Inventory', icon: Package }
+        ] : []),
     ];
 
     const SidebarContent = () => (

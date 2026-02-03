@@ -10,6 +10,7 @@ import Products from './pages/Products';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminProducts from './pages/AdminProducts';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                 {/* Admin only routes */}
                 <Route element={<ProtectedRoute allowedRoles={['Admin', 'Manager', 'Staff']} />}>
                   <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/products" element={<AdminProducts />} />
                 </Route>
               </Route>
 

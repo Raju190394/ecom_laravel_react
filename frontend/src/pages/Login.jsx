@@ -4,6 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, UserPlus, Globe, Ghost } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 
+import { Button } from '../components/common/Button';
+import { Input } from '../components/common/Input';
+
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [loading, setLoading] = useState(false);
@@ -28,7 +31,7 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-mesh p-6">
             <div className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-12 premium-card overflow-hidden">
-                {/* Brand Side */}
+                {/* Brand Side - Keep as is for now as it's layout specific */}
                 <div className="lg:col-span-5 brand-gradient p-12 text-white relative hidden lg:flex flex-col justify-between">
                     <div className="relative z-10 animate-slide-up">
                         <div className="flex items-center gap-3 mb-16">
@@ -74,53 +77,39 @@ const Login = () => {
                         </header>
 
                         <form onSubmit={handleSubmit} className="space-y-8">
-                            <div className="space-y-2">
-                                <label className="input-label">Corporate Email</label>
-                                <div className="relative group">
-                                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors w-5 h-5" />
-                                    <input
-                                        type="email"
-                                        required
-                                        className="input-base pl-14"
-                                        placeholder="user@enterprise.com"
-                                        value={credentials.email}
-                                        onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                                    />
-                                </div>
-                            </div>
+                            <Input
+                                label="Corporate Email"
+                                icon={Mail}
+                                type="email"
+                                required
+                                placeholder="user@enterprise.com"
+                                value={credentials.email}
+                                onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                            />
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                    <label className="input-label">Secure Key</label>
+                                <div className="flex justify-between items-center px-1">
+                                    <label className="input-label mb-0">Secure Key</label>
                                     <button type="button" className="text-sm text-indigo-600 font-bold hover:text-indigo-800 transition-colors">Recover Key?</button>
                                 </div>
-                                <div className="relative group">
-                                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors w-5 h-5" />
-                                    <input
-                                        type="password"
-                                        required
-                                        className="input-base pl-14"
-                                        placeholder="••••••••••••"
-                                        value={credentials.password}
-                                        onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                                    />
-                                </div>
+                                <Input
+                                    icon={Lock}
+                                    type="password"
+                                    required
+                                    placeholder="••••••••••••"
+                                    value={credentials.password}
+                                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                                />
                             </div>
 
-                            <button
+                            <Button
                                 type="submit"
-                                disabled={loading}
-                                className="w-full btn-primary h-16 group"
+                                loading={loading}
+                                className="w-full h-16 text-lg"
+                                icon={ArrowRight}
                             >
-                                {loading ? (
-                                    <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                ) : (
-                                    <>
-                                        <span className="text-lg">Authorize Access</span>
-                                        <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
-                                    </>
-                                )}
-                            </button>
+                                Authorize Access
+                            </Button>
                         </form>
 
                         <footer className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
