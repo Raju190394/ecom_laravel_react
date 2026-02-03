@@ -29,6 +29,11 @@ class ProductService
 
     public function createProduct(array $data)
     {
+        if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+            $path = $data['image']->store('products', 'public');
+            $data['image'] = $path;
+        }
+
         $product = Product::create($data);
         $this->clearProductCache();
         return $product;
@@ -36,6 +41,15 @@ class ProductService
 
     public function updateProduct(Product $product, array $data)
     {
+        if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old image if exists
+            if ($product->image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+            }
+            $path = $data['image']->store('products', 'public');
+            $data['image'] = $path;
+        }
+
         $product->update($data);
         $this->clearProductCache();
         return $product;
@@ -43,6 +57,9 @@ class ProductService
 
     public function deleteProduct(Product $product)
     {
+        if ($product->image) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+        }
         $res = $product->delete();
         $this->clearProductCache();
         return $res;

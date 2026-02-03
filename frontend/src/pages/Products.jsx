@@ -79,11 +79,18 @@ const Products = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {products.map((product) => (
                     <div key={product.id} className="group bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-indigo-100 transition-all duration-500 flex flex-col">
-                        {/* Image Placeholder */}
-                        <div className="h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center p-8 group-hover:bg-indigo-50/30 transition-colors">
-                            <div className="transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 text-slate-200 group-hover:text-indigo-200">
-                                <Package size={100} />
-                            </div>
+                        <div className="h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center group-hover:bg-indigo-50/30 transition-colors">
+                            {product.image ? (
+                                <img
+                                    src={`http://localhost:8000/storage/${product.image}`}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                />
+                            ) : (
+                                <div className="p-8 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 text-slate-200 group-hover:text-indigo-200">
+                                    <Package size={100} />
+                                </div>
+                            )}
 
                             <div className="absolute top-4 right-4 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all">
                                 <button className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-400 hover:text-indigo-600">
